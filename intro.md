@@ -33,3 +33,7 @@ Streaming refers to the process of delivering the response in a continuous strea
 # What is Prompt Template?
 
 A prompt refers to the input to the model. Prompt templates are a way to create dynamic prompts for LLMs. A prompt template takes a pice of text and injects a user's input into that piece of text. in Langchain there are **PromptTemplates** and **ChatPromptTemplates**
+
+# What is LangChain Chains
+
+Chains allow us to combine multiple components together to solve a specific task and build an entire LLM application

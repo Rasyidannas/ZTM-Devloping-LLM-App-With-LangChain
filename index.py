@@ -101,3 +101,35 @@ from langchain_openai import ChatOpenAI
 llm = ChatOpenAI()
 output = llm.invoke(messages)
 print(output.content)
+
+## Simple Chains 
+from langchain_openai import ChatOpenAI
+from langchain import PromptTemplate
+from langchain.chains import LLMChain
+
+llm = ChatOpenAI()
+template = '''You are an experience virologist. Write a few sentences about the following virus "{virus}" in {language}.'''
+prompt_template = PromptTemplate.from_template(template=template)
+
+chain = LLMChain(
+    llm=llm,
+    prompt=prompt_template,
+    verbose=True
+)
+
+output = chain.invoke({'virus': 'HSV', 'language': 'Indonesian'})
+print(output)
+
+### another expmaple of simple chains
+template = 'What is the capital of {country}?. List the top 3 places to visit in that city. Use bullet points'
+prompt_template = PromptTemplate.from_template(template=template)
+
+chain = LLMChain(
+    llm=llm,
+    prompt=prompt_template,
+    verbose=True
+)
+
+country = input('Enter Country: ')
+output = chain.invoke(country)
+print(output['text'])
