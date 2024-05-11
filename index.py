@@ -13,7 +13,7 @@ llm = ChatOpenAI()
 output = llm.invoke('Explain quantum mechanics in one sentence.', model='gpt-3.5-turbo')
 print(output.content)
 
-# this is for show detail our configuration CHatOpenAI
+# this is for show detail our configuration ChatOpenAI
 # help(ChatOpenAI)
 
 from langchain.schema import (
@@ -49,12 +49,23 @@ llm.invoke(prompt)
 end_time = time.time()
 print(f'Execution taken: {end_time - start_time}')
 
-##SQLite Caching
+## SQLite Caching
 from langchain.cache import SQLiteCache
 set_llm_cache(SQLiteCache(database_path='.langchain.db'))
 
-# First request (not in cahce, takes Longer)
+### First request (not in cahce, takes Longer)
 llm.invoke('Tell me a joke')
 
-# Second request (cached, faster)
+### Second request (cached, faster)
 llm.invoke('Tell me a joke')
+
+## LLM Streaming
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI()
+prompt = 'Write a rock song about the Moon and a Raven.'
+print(llm.invoke(prompt).content)
+
+### Enable streaming
+for chunk in llm.stream(prompt):
+    print(chunk.content, end='', flush=True)

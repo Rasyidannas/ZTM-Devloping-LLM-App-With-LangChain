@@ -25,3 +25,7 @@ LLMs alone are often limited in their ability to understand the context, interac
 # What is Caching in LLM
 
 Caching alone is is the is the practice of storing frequently accessed data or results in temporary, faster storage layer. It can boost performance and save costs with API. Caching optimize interactions with LLMs by reducing API calls and speeding up applications, resulting in a more efficient user experience.
+
+# What is LLM Streaming?
+
+Streaming refers to the process of delivering the response in a continuous stream of data instead of sending the entire response at one. Thi allows the user to recieve the response piece by piece as it is generated, which can improve the user experience and reduce the overall latency.
