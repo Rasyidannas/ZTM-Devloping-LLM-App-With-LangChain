@@ -82,3 +82,22 @@ prompt = prompt_template.format(virus='hiv', language='german')
 llm = ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0)
 output = llm.invoke(prompt)
 print(output.content)
+
+## ChatPromptTemplates
+from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
+from langchain_core.messages import SystemMessage
+
+chat_template = ChatPromptTemplate.from_messages(
+    [
+        SystemMessage(content='You respond only in the JSON format.'),
+        HumanMessagePromptTemplate.from_template('Top {n} countries in {area} by population.')
+    ]
+)
+
+messages = chat_template.format_messages(n='10', area='World')
+print(messages)
+
+from langchain_openai import ChatOpenAI
+llm = ChatOpenAI()
+output = llm.invoke(messages)
+print(output.content)
