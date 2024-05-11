@@ -29,3 +29,7 @@ Caching alone is is the is the practice of storing frequently accessed data or r
 # What is LLM Streaming?
 
 Streaming refers to the process of delivering the response in a continuous stream of data instead of sending the entire response at one. Thi allows the user to recieve the response piece by piece as it is generated, which can improve the user experience and reduce the overall latency.
+
+# What is Prompt Template?
+
+A prompt refers to the input to the model. Prompt templates are a way to create dynamic prompts for LLMs. A prompt template takes a pice of text and injects a user's input into that piece of text. in Langchain there are **PromptTemplates** and **ChatPromptTemplates**

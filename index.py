@@ -69,3 +69,16 @@ print(llm.invoke(prompt).content)
 ### Enable streaming
 for chunk in llm.stream(prompt):
     print(chunk.content, end='', flush=True)
+
+## Prompt Templates
+from langchain.prompts import PromptTemplate
+from langchain_openai import ChatOpenAI
+
+template = '''You are an experience virologist. Write a few sentences about the following virus {virus} in {language}.'''
+prompt_template = PromptTemplate.from_template(template=template)
+
+prompt = prompt_template.format(virus='hiv', language='german')
+
+llm = ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0)
+output = llm.invoke(prompt)
+print(output.content)
