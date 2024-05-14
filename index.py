@@ -157,3 +157,30 @@ overall_chain = SimpleSequentialChain(chains=[chain1, chain2], verbose=True)
 output = overall_chain.invoke('linear regression')
 
 print(output['output'])
+
+## LangChain Agents in Action: Python REPL
+#you use install langchin_experimental
+from langchain_experimental.utilities import PythonREPL
+python_repl = PythonREPL()
+python_repl.run('print([n for n in range (1, 100) if n % 13 == 0])')
+
+from langchain_experimental.agents.agent_toolkits import create_python_agent
+from langchain_experimental.tools.python.tool import PythonREPLTool
+from langchain_openai import ChatOpenAI
+
+llm = ChatOpenAI(model='gpt-4-turbo-preview', temperature=0)
+agent_executor = create_python_agent(
+    llm=llm,
+    tool=PythonREPLTool(), #this is tool in necessary for agent
+    verbose=True
+)
+
+agent_executor.invoke('Calculate the square root of the factorial of 12 and display it with 4 decimal points')
+
+response = agent_executor.invoke('What is the answer to 5.1 ** 7.3?')
+
+response
+
+print(response['input'])
+
+print(response['output'])
