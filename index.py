@@ -133,3 +133,27 @@ chain = LLMChain(
 country = input('Enter Country: ')
 output = chain.invoke(country)
 print(output['text'])
+
+## Sequential Chains
+
+from langchain_openai import ChatOpenAI
+from langchain import PromptTemplate
+from langchain.chains import LLMChain, SimpleSequentialChain
+
+llm1 = ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0.5)
+prompt_template1 = PromptTemplate.from_template(
+    template='You are an experiment scientist and Python programmer. Write a function that implements the concept of {concept}.'
+)
+
+chain1 = LLMChain(llm=llm1, prompt=prompt_template1)
+
+llm2 = ChatOpenAI(model_name='gpt-4-turbo-preview', temperature=1.2)
+prompt_template2 = PromptTemplate.from_template(
+    template='Given the python function {function}, describe it as detailed as possible.'
+)
+chain2 = LLMChain(llm=llm2, prompt=prompt_template2)
+
+overall_chain = SimpleSequentialChain(chains=[chain1, chain2], verbose=True)
+output = overall_chain.invoke('linear regression')
+
+print(output['output'])

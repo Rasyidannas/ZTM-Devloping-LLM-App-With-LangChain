@@ -37,3 +37,11 @@ A prompt refers to the input to the model. Prompt templates are a way to create 
 # What is LangChain Chains
 
 Chains allow us to combine multiple components together to solve a specific task and build an entire LLM application
+
+# What is Sequentail Chains
+
+with sequentaiil chains, you can make a series of calls to one or more LLMs. You can take the output from one chain and use it as the input to another chain. This is suit for complex task.  
+There are two types of sequential chains:
+
+1. **SimpleSequentialChain** is represents a series of chains, where each individual chain has a single input anda single output, and the output of one step is used as input to the next.
+2. General form of sequential chains
