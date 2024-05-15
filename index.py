@@ -184,3 +184,50 @@ response
 print(response['input'])
 
 print(response['output'])
+
+## LangChain Tools: DuckDuckGo and Wikipedia
+### DuckDuckGo Search
+# optional, filter workings (recommended in production)
+import warnings
+warnings.filterwarnings('ignore', module='langchain')
+
+from langchain.tools import DuckDuckGoSearchRun
+
+search = DuckDuckGoSearchRun()
+output = search.invoke('Where was Freddie Mercury born?')
+print(output)
+
+search.name
+search.description
+
+from langchain.tools import DuckDuckGoSearchResults
+search = DuckDuckGoSearchResults()
+output = search.run('Freddie Mercury and Queen.')
+print(output)
+
+from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
+
+wrapper = DuckDuckGoSearchAPIWrapper(region='de-de', max_results=3, safesearch='moderate')
+search = DuckDuckGoSearchResults(api_wrapper=wrapper, source='news')
+output = search.run('Berlin')
+
+print(output)
+
+import re
+pattern = r'snippet: (.*?), title: (.*?), link: (.*?)\],'
+matches = re.findall(pattern, output, re.DOTALL)
+
+for snippet, title, link in matches:
+    print(f'Snippet: {snippet}\nTitle: {title}\nLink: {link}\n')
+    print('-' * 50)
+
+### Wikipedia Search
+from langchain_community.tools import WikipediaQueryRun
+from langchain_community.utilities import WikipediaAPIWrapper
+
+api_wrapper = WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=10000)
+wiki = WikipediaQueryRun(api_wrapper=api_wrapper)
+wiki.invoke({'query': 'llamaindex'})
+
+output = wiki.invoke('Google Gemini')
+print(output)

@@ -45,3 +45,9 @@ There are two types of sequential chains:
 
 1. **SimpleSequentialChain** is represents a series of chains, where each individual chain has a single input anda single output, and the output of one step is used as input to the next.
 2. General form of sequential chains
+
+# What is Langchain tools?
+
+Langchain tools are like speciallized apps for your LLM. They are tiny code modules that allow it to access information and services.
+
+These tools connect your LLM to search engines, databses, APIs, and more expanding its knowledge and capabilities.
