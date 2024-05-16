@@ -51,3 +51,9 @@ There are two types of sequential chains:
 Langchain tools are like speciallized apps for your LLM. They are tiny code modules that allow it to access information and services.
 
 These tools connect your LLM to search engines, databses, APIs, and more expanding its knowledge and capabilities.
+
+# What is Reasoning and Acting (ReAct)?
+
+ReAct is a new approach that combines reasoning (chain-of-thoughts prompting) and acting capabilities of LLMs.
+
+With ReAct LLMs generate reasoning traces and task-specific actions in an interleaved manner.
