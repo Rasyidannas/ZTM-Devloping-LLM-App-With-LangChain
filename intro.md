@@ -57,3 +57,14 @@ These tools connect your LLM to search engines, databses, APIs, and more expandi
 ReAct is a new approach that combines reasoning (chain-of-thoughts prompting) and acting capabilities of LLMs.
 
 With ReAct LLMs generate reasoning traces and task-specific actions in an interleaved manner.
+
+# What is Embeddings?
+
+Embeddings are the core of Building LLMs applications. Text embedding are numeric representations of text and are used in NLP and ML tasks.  
+The distance between two embedings or two vectores measures their relatedness which translates to the relatedness between the text concepts they represent. Similar embeddings or vectors represent similar concept
+
+**Embeddings Aplications**:
+
+- Text Classification: assign a label to a piece of text.
+- Text Clustering: grouping together pieces of text that are similar in meaning.
+- Question-Answering: answering a question posed in natural language
