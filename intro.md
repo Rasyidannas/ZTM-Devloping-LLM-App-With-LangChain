@@ -68,3 +68,11 @@ The distance between two embedings or two vectores measures their relatedness wh
 - Text Classification: assign a label to a piece of text.
 - Text Clustering: grouping together pieces of text that are similar in meaning.
 - Question-Answering: answering a question posed in natural language
+
+# What is Vector Databses?
+
+Vector databases are a new type of database, designed to store and query unstructured data (Unstructured data is data that does not have a fixed schema, such as text, images, and audio).
+
+## How Pipeline for Vector Databses
+
+Vector databses use a combination of different optimized algorithms that all participate in **Approximate Nearest Neighbor(ANN)** search
