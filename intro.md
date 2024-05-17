@@ -76,3 +76,13 @@ Vector databases are a new type of database, designed to store and query unstruc
 ## How Pipeline for Vector Databses
 
 Vector databses use a combination of different optimized algorithms that all participate in **Approximate Nearest Neighbor(ANN)** search
+
+# What is Pinecone Indexs?
+
+An index is the highest-level organizational unit of vector data in Piecone.
+It accepts and stores vectors, server queries over the vectors it contains, and does other vector operations over its contenes.
+
+**Kind of Pinecones Indexes**
+
+1. Serverless indexes: you don't configure or manage any compute or storage resources (they scale automatically).
+2. Pod-based indexes: you choose one or more preconfigured unit of hardware(pods).
