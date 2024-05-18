@@ -1,5 +1,6 @@
 import time
 
+## ================ LANGCHAIN ================ ##
 # Python-dotenv
 import os
 from dotenv import load_dotenv, find_dotenv
@@ -30,7 +31,7 @@ messages = [
 output = llm.invoke(messages)
 print(output.content)
 
-# Caching LLM Responses
+## ================ Caching LLM Responses ================ ##
 ## In-Memory Cache
 from langchain.globals import set_llm_cache
 from langchain_openai import OpenAI
@@ -59,7 +60,7 @@ llm.invoke('Tell me a joke')
 ### Second request (cached, faster)
 llm.invoke('Tell me a joke')
 
-## LLM Streaming
+## ================  LLM Streaming ================ ##
 from langchain_openai import ChatOpenAI
 
 llm = ChatOpenAI()
@@ -70,7 +71,7 @@ print(llm.invoke(prompt).content)
 for chunk in llm.stream(prompt):
     print(chunk.content, end='', flush=True)
 
-## Prompt Templates
+## ================ Prompt Templates ================ ##
 from langchain.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 
@@ -83,7 +84,7 @@ llm = ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0)
 output = llm.invoke(prompt)
 print(output.content)
 
-## ChatPromptTemplates
+### ChatPromptTemplates
 from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate
 from langchain_core.messages import SystemMessage
 
@@ -102,7 +103,7 @@ llm = ChatOpenAI()
 output = llm.invoke(messages)
 print(output.content)
 
-## Simple Chains 
+## ================  Simple Chains ================ ##
 from langchain_openai import ChatOpenAI
 from langchain import PromptTemplate
 from langchain.chains import LLMChain
@@ -134,7 +135,7 @@ country = input('Enter Country: ')
 output = chain.invoke(country)
 print(output['text'])
 
-## Sequential Chains
+## ================  Sequential Chains ================ ##
 
 from langchain_openai import ChatOpenAI
 from langchain import PromptTemplate
@@ -158,7 +159,7 @@ output = overall_chain.invoke('linear regression')
 
 print(output['output'])
 
-## LangChain Agents in Action: Python REPL
+## ================ LangChain Agents in Action: Python REPL Tool ================ ##
 #you use install langchin_experimental
 from langchain_experimental.utilities import PythonREPL
 python_repl = PythonREPL()
@@ -185,7 +186,7 @@ print(response['input'])
 
 print(response['output'])
 
-## LangChain Tools: DuckDuckGo and Wikipedia
+## ================ LangChain Tools: DuckDuckGo and Wikipedia Search ================ ##
 ### DuckDuckGo Search
 # optional, filter workings (recommended in production)
 import warnings

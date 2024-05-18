@@ -1,4 +1,4 @@
-# PINECONE
+## ================ PINECONE ================ ##
 # authenticating to Pinecone. 
 # the API KEY is in .env
 import os
@@ -47,7 +47,7 @@ else:
 index = pc.Index(index_name)
 index.describe_index_stats()
 
-## Working with Vectors
+## ================ Working with Vectors ================ ##
 ### insering vectors
 import random
 vectors = [[random.random() for _ in range(1536)] for v in range(5)]
@@ -84,7 +84,7 @@ index.query(
     include_values=False
 )
 
-## Namespaces
+## ================ Namespaces  ================ ##
 # index.describe_index_stats()
 index = pc.Index('langchain')
 
@@ -111,3 +111,42 @@ index.delete(ids=['x'], namespace='first-namespace')
 
 ### delete namespace
 index.delete(delete_all=True, namespace='first-namespace')
+
+## ================ Splitting and Embedding Text Using LangChain ================ ##
+
+import os
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv(), override=True)
+
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+with open('files/churchill_speech.txt') as f:
+    churchill_speech = f.read()
+
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=100,
+    chunk_overlap=20,
+    length_function=len
+)
+
+chunks = text_splitter.create_documents([churchill_speech])
+# print(chunks[0])
+# print(chunks[10].page_content)
+print(f'Now you have {len(chunks)}')
+
+## ================ Embeding Cost ================ ##
+def print_embedding_cost(texts):
+    import tiktoken
+    enc = tiktoken.encoding_for_model('text-embedding-3-small')
+    total_tokens = sum([len(enc.encode(page.page_content)) for page in texts])
+    # check prices here: https://openai.com/pricing
+    print(f'Total Tokens: {total_tokens}')
+    print(f'Embedding Cost in USD: {total_tokens / 1000 * 0.00255:.6f}')
+
+print_embedding_cost(chunks)
+
+## ================ Creating Embeding ================ ##
+from langchain.embeddings import OpenAIEmbeddings
+embedding = OpenAIEmbeddings()
+
+vector = embedding.embed_query(chunks[0].page_content)
+print(vector)
