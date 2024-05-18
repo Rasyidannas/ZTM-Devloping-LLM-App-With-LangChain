@@ -150,3 +150,31 @@ embedding = OpenAIEmbeddings()
 
 vector = embedding.embed_query(chunks[0].page_content)
 print(vector)
+
+## ================ Inserting the Embeding into a Pinecone Index ================ ##
+import pinecone
+from langchain_community.vectorstores import Pinecone
+pc = pinecone.Pinecone()
+
+for i in pc.list_indexes().names():
+    print('Deleteing all indexes')
+    pc.delete_index(i)
+    print('Done')
+
+index_name = 'churchill-speech'
+if index_name not in pc.list_indexes().names():
+    print(f'Creating index {index_name} ...')
+    pc.create_index(
+        name=index_name,
+        dimension=1536,
+        metric='cosine',
+        spec=pinecone.PodSpec(
+            environment='gcp-starter'
+        )
+    )
+    print('Done')
+
+vectore_store = Pinecone.from_documents(chunks, embeddings, index_name=index_name)
+
+# loading the vector store from an existing index
+vector_store = Pinecone.from_existing_index(index_name='churchill-speech', embedding=embeddings)
