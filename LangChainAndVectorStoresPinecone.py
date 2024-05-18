@@ -18,22 +18,22 @@ pc.list_indexes()
 pc.list_indexes().names()
 
 ### creating pinecone indexes with serveeless
-from pinecone import ServerlessSpec
-index_name = 'langchain'
-if index_name not in pc.list_indexes().names():
-    print(f"Creating index {index_name}")
-    pc.create_index(
-        name=index_name, 
-        dimension=1536,
-        metric="cosine",
-        spec=ServerlessSpec(
-            cloud="aws",
-            region="us-east-1",
-            )
-        )
-    print('Index created! :D')
-else:
-    print(f"Index {index_name} already exists")
+# from pinecone import ServerlessSpec
+# index_name = 'langchain'
+# if index_name not in pc.list_indexes().names():
+#     print(f"Creating index {index_name}")
+#     pc.create_index(
+#         name=index_name, 
+#         dimension=1536,
+#         metric="cosine",
+#         spec=ServerlessSpec(
+#             cloud="aws",
+#             region="us-east-1",
+#             )
+#         )
+#     print('Index created! :D')
+# else:
+#     print(f"Index {index_name} already exists")
 
 ### deleting pinecone indexes
 # index_name = 'langchain'
@@ -44,73 +44,73 @@ else:
 # else: 
 #     print(f'Index {index_name} does not exist!')
 
-index = pc.Index(index_name)
-index.describe_index_stats()
+# index = pc.Index(index_name)
+# index.describe_index_stats()
 
 ## ================ Working with Vectors ================ ##
 ### insering vectors
-import random
-vectors = [[random.random() for _ in range(1536)] for v in range(5)]
-# print(vectors)
-ids = list('abcde')
+# import random
+# vectors = [[random.random() for _ in range(1536)] for v in range(5)]
+# # print(vectors)
+# ids = list('abcde')
 
-index_name = 'langchain'
-index = pc.Index(index_name)
-
-index.upsert(vectors=zip(ids, vectors))
-
-### update vectors
-index.upsert(vectors=[('c', [0.5] * 1536)])
-
-### fetch vectors
+# index_name = 'langchain'
 # index = pc.Index(index_name)
-index.fetch(ids=['c', 'd'])
 
-### delete vectors
-index.delete(ids=['b', 'c'])
+# index.upsert(vectors=zip(ids, vectors))
 
-index.describe_index_stats()
+# ### update vectors
+# index.upsert(vectors=[('c', [0.5] * 1536)])
 
-index.fetch(ids=['x'])
+# ### fetch vectors
+# # index = pc.Index(index_name)
+# index.fetch(ids=['c', 'd'])
 
-### query 
-query_vector = [random.random() for _ in range(1536)]
-# print(query_vector)
+# ### delete vectors
+# index.delete(ids=['b', 'c'])
 
-# This retrieves the query_vectors of the most similar records in your index, along with their similarity scores.
-index.query(
-    vector=query_vector,
-    top_k=3,
-    include_values=False
-)
+# index.describe_index_stats()
+
+# index.fetch(ids=['x'])
+
+# ### query 
+# query_vector = [random.random() for _ in range(1536)]
+# # print(query_vector)
+
+# # This retrieves the query_vectors of the most similar records in your index, along with their similarity scores.
+# index.query(
+#     vector=query_vector,
+#     top_k=3,
+#     include_values=False
+# )
 
 ## ================ Namespaces  ================ ##
+# # index.describe_index_stats()
+# index = pc.Index('langchain')
+
+# import random
+# vectors = [[random.random() for _ in range(1536)] for v in range(5)]
+# ids = list('abcde')
+# index.upsert(vectors=zip(ids, vectors))
+
+# vectors = [[random.random() for _ in range(1536)] for v in range(3)]
+# ids = list('xyz')
+# index.upsert(vectors=zip(ids, vectors), namespace='first-namespace')
+
+# vectors = [[random.random() for _ in range(1536)] for v in range(3)]
+# ids = list('aq')
+# index.upsert(vectors=zip(ids, vectors), namespace='second-namespace')
+
 # index.describe_index_stats()
-index = pc.Index('langchain')
 
-import random
-vectors = [[random.random() for _ in range(1536)] for v in range(5)]
-ids = list('abcde')
-index.upsert(vectors=zip(ids, vectors))
+# ### get specific namespace
+# index.fetch(ids=['x'], namespace='first-namespace')
 
-vectors = [[random.random() for _ in range(1536)] for v in range(3)]
-ids = list('xyz')
-index.upsert(vectors=zip(ids, vectors), namespace='first-namespace')
+# ### delete specific id in namespace
+# index.delete(ids=['x'], namespace='first-namespace')
 
-vectors = [[random.random() for _ in range(1536)] for v in range(3)]
-ids = list('aq')
-index.upsert(vectors=zip(ids, vectors), namespace='second-namespace')
-
-index.describe_index_stats()
-
-### get specific namespace
-index.fetch(ids=['x'], namespace='first-namespace')
-
-### delete specific id in namespace
-index.delete(ids=['x'], namespace='first-namespace')
-
-### delete namespace
-index.delete(delete_all=True, namespace='first-namespace')
+# ### delete namespace
+# index.delete(delete_all=True, namespace='first-namespace')
 
 ## ================ Splitting and Embedding Text Using LangChain ================ ##
 
@@ -146,9 +146,9 @@ print_embedding_cost(chunks)
 
 ## ================ Creating Embeding ================ ##
 from langchain.embeddings import OpenAIEmbeddings
-embedding = OpenAIEmbeddings()
+embeddings = OpenAIEmbeddings()
 
-vector = embedding.embed_query(chunks[0].page_content)
+vector = embeddings.embed_query(chunks[0].page_content)
 print(vector)
 
 ## ================ Inserting the Embeding into a Pinecone Index ================ ##
@@ -156,25 +156,54 @@ import pinecone
 from langchain_community.vectorstores import Pinecone
 pc = pinecone.Pinecone()
 
-for i in pc.list_indexes().names():
-    print('Deleteing all indexes')
+# deleting all indexes
+indexes = pc.list_indexes().names()
+for i in indexes:
+    print('Deleting all indexes ... ', end='')
     pc.delete_index(i)
     print('Done')
 
+# creating an index
+from pinecone import ServerlessSpec
 index_name = 'churchill-speech'
 if index_name not in pc.list_indexes().names():
-    print(f'Creating index {index_name} ...')
+    print(f'Creating index {index_name}')
     pc.create_index(
         name=index_name,
         dimension=1536,
         metric='cosine',
-        spec=pinecone.PodSpec(
-            environment='gcp-starter'
-        )
+        spec=ServerlessSpec(
+            cloud="aws",
+            region="us-east-1"
+        ) 
     )
-    print('Done')
+    print('Index created! 😊')
+else:
+    print(f'Index {index_name} already exists!')
 
-vectore_store = Pinecone.from_documents(chunks, embeddings, index_name=index_name)
+# processing the input documents, generating embeddings using the provided `OpenAIEmbeddings` instance,
+# inserting the embeddings into the index and returning a new Pinecone vector store object. 
+vector_store = Pinecone.from_documents(chunks, embeddings, index_name=index_name)
 
-# loading the vector store from an existing index
-vector_store = Pinecone.from_existing_index(index_name='churchill-speech', embedding=embeddings)
+index = pc.Index(index_name)
+index.describe_index_stats()
+
+
+## ================ Asking Questions (Similarity Search) ================ ##
+from langchain.chains import RetrievalQA
+from langchain_openai import ChatOpenAI
+
+# Initialize the LLM with the specified model and temperature
+llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=0.2)
+
+# Use the provided vector store with similarity search and retrieve top 3 results
+retriever = vector_store.as_retriever(search_type='similarity', search_kwargs={'k': 3})
+
+# Create a RetrievalQA chain using the defined LLM, chain type 'stuff', and retriever
+chain = RetrievalQA.from_chain_type(llm=llm, chain_type='stuff', retriever=retriever)
+
+# query = 'Answer only from the provided input. Where should we fight?'
+# query = 'Who was the King of Belgium at the time?'
+query = 'What about the French Armies?'
+answer = chain.invoke(query)
+print(answer)
