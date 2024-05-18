@@ -17,7 +17,7 @@ pc.list_indexes()
 ## Working with Pinecone Indexes
 pc.list_indexes().names()
 
-#creating pinecone indexes with serveeless
+### creating pinecone indexes with serveeless
 from pinecone import ServerlessSpec
 index_name = 'langchain'
 if index_name not in pc.list_indexes().names():
@@ -35,7 +35,7 @@ if index_name not in pc.list_indexes().names():
 else:
     print(f"Index {index_name} already exists")
 
-#deleting pinecone indexes
+### deleting pinecone indexes
 # index_name = 'langchain'
 # if index_name in pc.list_indexes().names():
 #     print(f'Deleting index {index_name}...')
@@ -48,7 +48,7 @@ index = pc.Index(index_name)
 index.describe_index_stats()
 
 ## Working with Vectors
-#insering vectors
+### insering vectors
 import random
 vectors = [[random.random() for _ in range(1536)] for v in range(5)]
 # print(vectors)
@@ -59,21 +59,21 @@ index = pc.Index(index_name)
 
 index.upsert(vectors=zip(ids, vectors))
 
-#update vectors
+### update vectors
 index.upsert(vectors=[('c', [0.5] * 1536)])
 
-# fetch vectors
+### fetch vectors
 # index = pc.Index(index_name)
 index.fetch(ids=['c', 'd'])
 
-# delete vectors
+### delete vectors
 index.delete(ids=['b', 'c'])
 
 index.describe_index_stats()
 
 index.fetch(ids=['x'])
 
-# query 
+### query 
 query_vector = [random.random() for _ in range(1536)]
 # print(query_vector)
 
@@ -83,3 +83,31 @@ index.query(
     top_k=3,
     include_values=False
 )
+
+## Namespaces
+# index.describe_index_stats()
+index = pc.Index('langchain')
+
+import random
+vectors = [[random.random() for _ in range(1536)] for v in range(5)]
+ids = list('abcde')
+index.upsert(vectors=zip(ids, vectors))
+
+vectors = [[random.random() for _ in range(1536)] for v in range(3)]
+ids = list('xyz')
+index.upsert(vectors=zip(ids, vectors), namespace='first-namespace')
+
+vectors = [[random.random() for _ in range(1536)] for v in range(3)]
+ids = list('aq')
+index.upsert(vectors=zip(ids, vectors), namespace='second-namespace')
+
+index.describe_index_stats()
+
+### get specific namespace
+index.fetch(ids=['x'], namespace='first-namespace')
+
+### delete specific id in namespace
+index.delete(ids=['x'], namespace='first-namespace')
+
+### delete namespace
+index.delete(delete_all=True, namespace='first-namespace')

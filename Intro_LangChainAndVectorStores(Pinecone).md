@@ -26,3 +26,16 @@ It accepts and stores vectors, server queries over the vectors it contains, and 
 
 1. Serverless indexes: you don't configure or manage any compute or storage resources (they scale automatically).
 2. Pod-based indexes: you choose one or more preconfigured unit of hardware(pods).
+
+# What is Pinecone namespaces
+
+Pinecone allow you to partition the vectors in an index into namespaces.
+
+Queries and other operations are scoped to a specific namespaces, allowing different request to search different subsets of your index.
+
+**Key information about namespaces**
+
+- Every index consists of one or more namespaces
+- Eeach vector exists in exactly one namespace
+- Namespaces are uniquely identified by a namespace name
+- The default namespace is represented by the empty string and is used if no specific namespace is specified
