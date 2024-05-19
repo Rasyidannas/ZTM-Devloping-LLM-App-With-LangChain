@@ -4,6 +4,7 @@ langchain_openai
 langchain_experimental
 langchain_community
 langchainhub
+langchain-text-splitters
 pinecone-client
 python-dotenv
 tiktoken
