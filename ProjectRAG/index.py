@@ -22,6 +22,13 @@ def load_document(file):
     data = loader.load()
     return data
 
+# Wikipedia
+def load_from_wikipedia(query, lang='en', load_max_docs=2):
+    from langchain_community.document_loaders import WikipediaLoader
+    loader = WikipediaLoader(query=query, lang=lang, load_max_docs=load_max_docs)
+    data = loader.load()
+    return data
+
 ## Runnig Code
 data = load_document('files/us_constitution.pdf')
 # print(data[1],page_content)
@@ -31,4 +38,7 @@ print(f'You have {len(data)} pages in your data')
 print(f'There are {len(data[20].page_content)} characters in the page')
 
 data = load_document('files/the_great_gatsby.docx')
+print(data[0].page_content)
+
+data = load_from_wikipedia('GPT-4')
 print(data[0].page_content)
