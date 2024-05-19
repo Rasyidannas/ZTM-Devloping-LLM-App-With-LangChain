@@ -11,7 +11,7 @@ The distance between two embedings or two vectores measures their relatedness wh
 
 # What is Vector Databses?
 
-Vector databases are a new type of database, designed to store and query unstructured data (Unstructured data is data that does not have a fixed schema, such as text, images, and audio).
+Vector databases are a new type of database, designed to store and query unstructured data (Unstructured data is data that does not have a fixed schema, such as text, images, and audio). Kind of vector database service: Pinecone, Chroma, Milvus and Quadrant.
 
 ## How Pipeline for Vector Databses
 
