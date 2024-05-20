@@ -1,4 +1,5 @@
 #Project: Question Answering on Private Documents
+## ================ Using Pinecone as a Vector DB ================ ##
 import os
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv(), override=True)
@@ -157,7 +158,7 @@ q = "Apa itu chatgpt"
 answer = ask_and_get_answer(vector_store, q)
 print(answer)
 
-## Using Chroma as a Vector DB
+## ================ Using Chroma as a Vector DB ================ ##
 def create_embeddings_chroma(chunks, persist_directory='./chroma_db'):
     from langchain.vectorstores import Chroma
     from langchain_openai import OpenAIEmbeddings
@@ -200,3 +201,50 @@ print(answer)
 q = 'Multiply that number by 2'
 answer = ask_and_get_answer(vector_store, q)
 print(answer)
+
+## Adding Memory (Chat History)
+from langchain_openai import ChatOpenAI
+from langchain.chains import ConversationalRetrievalChain  # Import class for building conversational AI chains 
+from langchain.memory import ConversationBufferMemory  # Import memory for storing conversation history
+
+# Instantiate a ChatGPT LLM (temperature controls randomness)
+llm = ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0)  
+
+# Configure vector store to act as a retriever (finding similar items, returning top 5)
+retriever = vector_store.as_retriever(search_type='similarity', search_kwargs={'k': 5})  
+
+
+# Create a memory buffer to track the conversation
+memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
+
+crc = ConversationalRetrievalChain.from_llm(
+    llm=llm,  # Link the ChatGPT LLM
+    retriever=retriever,  # Link the vector store based retriever
+    memory=memory,  # Link the conversation memory
+    chain_type='stuff',  # Specify the chain type
+    verbose=False  # Set to True to enable verbose logging for debugging
+)
+
+def ask_question(q, chain):
+    result = chain.invoke({'question': q})
+    return result
+
+data = load_document('files/rag_powered_by_google_search.pdf')
+chunks = chunk_data(data, chunk_size=256)
+vector_store = create_embeddings_chroma(chunks)
+
+q = 'How many pairs of questions and answers had the StackOverflow dataset?'
+result = ask_question(q, crc)
+print(result)
+print(result['answer'])
+
+q = 'Multiply that number by 10'
+result = ask_question(q, crc)
+print(result['answer'])
+
+q = 'Devide that result by 80'
+result = ask_question(q, crc)
+print(result['answer'])
+
+for item in result['chat_history']:
+    print(item)
