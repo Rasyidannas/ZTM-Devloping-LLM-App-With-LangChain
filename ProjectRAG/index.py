@@ -131,12 +131,12 @@ print(answer)
 ## Looping questing and answering
 import time
 i = 1
-print('Write Quit or Exist to quit.')
+print('Write Quit or Exit to quit.')
 
 while True:
     q = input(f'Question #{i}: ')
     i = i + 1
-    if q.lower() in ['quit', 'exist']:
+    if q.lower() in ['quit', 'exit']:
         print('Quitting ... bye bye!')
         time.sleep(2)
         break
@@ -154,5 +154,49 @@ index_name = 'chatgpt'
 vector_store = insert_or_fetch_embeddings(index_name, chunks)
 
 q = "Apa itu chatgpt"
+answer = ask_and_get_answer(vector_store, q)
+print(answer)
+
+## Using Chroma as a Vector DB
+def create_embeddings_chroma(chunks, persist_directory='./chroma_db'):
+    from langchain.vectorstores import Chroma
+    from langchain_openai import OpenAIEmbeddings
+
+    # Instantiate an embedding model from OpenAI (smaller version for efficiency)
+    embeddings = OpenAIEmbeddings(model='text-embedding-3-small', dimensions=1536)  
+
+    # Create a Chroma vector store using the provided text chunks and embedding model, 
+    # configuring it to save data to the specified directory 
+    vector_store = Chroma.from_documents(chunks, embeddings, persist_directory=persist_directory) 
+
+    return vector_store  # Return the created vector store
+
+def load_embeddings_chroma(persist_directory='./chroma_db'):
+    from langchain.vectorstores import Chroma
+    from langchain_openai import OpenAIEmbeddings
+
+    # Instantiate the same embedding model used during creation
+    embeddings = OpenAIEmbeddings(model='text-embedding-3-small', dimensions=1536) 
+
+    # Load a Chroma vector store from the specified directory, using the provided embedding function
+    vector_store = Chroma(persist_directory=persist_directory, embedding_function=embeddings) 
+
+    return vector_store  # Return the loaded vector store
+
+data = load_document('files/rag_powered_by_google_search.pdf')
+chunks = chunk_data(data, chunk_size=256)
+vector_store = create_embeddings_chroma(chunks)
+
+q = 'What is Vertex AI Search'
+answer = ask_and_get_answer(vector_store, q)
+print(answer)
+
+# Load a Chroma vector store from the specified directory (default ./chroma_db) 
+db = load_embeddings_chroma()
+q = 'How many pairs of questions and answers had the StackOverflow dataset?'
+answer = ask_and_get_answer(vector_store, q)
+print(answer)
+
+q = 'Multiply that number by 2'
 answer = ask_and_get_answer(vector_store, q)
 print(answer)
