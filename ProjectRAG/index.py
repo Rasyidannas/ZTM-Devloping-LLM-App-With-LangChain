@@ -248,3 +248,56 @@ print(result['answer'])
 
 for item in result['chat_history']:
     print(item)
+
+## Using a Custom Prompt
+from langchain_openai import ChatOpenAI
+from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
+
+from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
+
+llm = ChatOpenAI(model_name='gpt-3.5-turbo', temperature=0)
+retriever = vector_store.as_retriever(search_type='similarity', search_kwargs={'k': 5})
+memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
+
+
+system_template = r'''
+Use the following pieces of context to answer the user's question.
+Before answering translate your response to Indonesian.
+If you don't find the answer in the provided context, just respond "I don't know."
+---------------
+Context: ```{context}```
+'''
+
+user_template = '''
+Question: ```{question}```
+'''
+
+messages= [
+    SystemMessagePromptTemplate.from_template(system_template),
+    HumanMessagePromptTemplate.from_template(user_template)
+]
+
+qa_prompt = ChatPromptTemplate.from_messages(messages)
+
+crc = ConversationalRetrievalChain.from_llm(
+    llm=llm,
+    retriever=retriever,
+    memory=memory,
+    chain_type='stuff',
+    combine_docs_chain_kwargs={'prompt': qa_prompt },
+    verbose=True
+)
+
+print(qa_prompt)
+
+db = load_embeddings_chroma()
+q = 'How many pairs of questions and answers had the StackOverflow dataset?'
+result = ask_question(q, crc)
+print(result)
+
+q = 'When was Elon Musk born?'
+result = ask_question(q, crc)
+print(result)
+
+print(result['answer'])
